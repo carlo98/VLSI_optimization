@@ -1,5 +1,3 @@
-include "gecode.mzn";
-
 %% Inputs
 int: w;  % Width of plate
 int: n;  % Number of circuits
@@ -28,7 +26,7 @@ search_ann = int_search(sol, dom_w_deg, indomain_random);
 %% Solve & output
 solve
   :: search_ann
-  :: restart_luby(250) % L = 250
+  %:: restart_luby(250) % L = 250
   minimize obj;
   
 output [

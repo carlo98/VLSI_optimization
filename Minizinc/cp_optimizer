@@ -1,8 +1,9 @@
 {
     "openFiles": [
-        "model_0.mzn"
+        "model_0.mzn",
+        "model_1.mzn"
     ],
-    "openTab": 0,
+    "openTab": 1,
     "projectFiles": [
         "instances/ins-1.dzn",
         "instances/ins-10.dzn",
@@ -45,8 +46,9 @@
         "instances/ins-8.dzn",
         "instances/ins-9.dzn",
         "model_0.mzn",
-        "model_0_solver.mpc"
+        "model_1.mzn",
+        "time_statistics.mpc"
     ],
-    "selectedSolverConfigFile": "model_0_solver.mpc",
+    "selectedSolverConfigFile": "time_statistics.mpc",
     "version": 106
 }
