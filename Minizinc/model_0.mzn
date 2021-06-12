@@ -11,7 +11,7 @@ array[CIRCUITS] of var int: heights;  % Height for each circuit
 %% Constraints
 constraint forall(c in CIRCUITS)(heights[c] == sol[c, 2]+dims[c, 2]);  % Consistence for heights
 constraint forall(c1, c2 in CIRCUITS where c1!=c2)(avoid_intersection(sol, dims, c1, c2));  % Avoiding intersections
-constraint forall(c in CIRCUITS)(sol[c, 1]+dims[c, 1]<=w-1);  % Forcing width
+constraint forall(c in CIRCUITS)(sol[c, 1]+dims[c, 1]<=w);  % Forcing width
 
 var int: obj = max(heights);
 
