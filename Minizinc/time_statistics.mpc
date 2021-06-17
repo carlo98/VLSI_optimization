@@ -1,4 +1,5 @@
 {
+    "--nogoods": true,
     "intermediate-solutions": true,
     "solver": "org.gecode.gecode@6.3.0",
     "solver-statistics": true,

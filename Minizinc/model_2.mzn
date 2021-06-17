@@ -20,8 +20,10 @@ array[CIRCUITS, 1..2] of var 0..max(max_width, max_height): sol;  % xy positions
 
 % Utilities
 array[CIRCUITS] of var int: max_y;  % Max y coordinates for each circuit
-array[CIRCUITS] of var int: sol_hor = [sol[c, 1] | c in CIRCUITS];  % x values sol
-array[CIRCUITS] of var int: sol_ver = [sol[c, 2] | c in CIRCUITS];  % y values sol
+array[CIRCUITS] of var 0..max_width: sol_hor = [sol[c, 1] | c in CIRCUITS];  % x values sol
+array[CIRCUITS] of var 0..max_height: sol_ver = [sol[c, 2] | c in CIRCUITS];  % y values sol
+%array[CIRCUITS, 1..2] of var int: dims_v;  % Used for plot in python
+%var int: w_v;  % Used for plot in python
 
 % Objective value
 var int: obj = max(max_y);  % Minimizing area giving precedence to height
@@ -39,26 +41,32 @@ constraint forall(c in CIRCUITS)(sol[c, 2] <= max_height - dims[c, 2]);  % Impli
 constraint lex_lesseq(sol_hor, reverse(sol_hor)) /\  % Horizontal
            lex_lesseq(sol_ver, reverse(sol_ver));  % Vertical
            
-constraint forall(c1 in CIRCUITS)(lex_lesseq([sol_hor[c2] | c2 in CIRCUITS where c1 < c2 /\ {dims[c1, 1], dims[c1, 2]} == {dims[c2, 1], dims[c2, 2]}], reverse([sol_hor[c2] | c2 in CIRCUITS where c1 < c2 /\ {dims[c1, 1], dims[c1, 2]} == {dims[c2, 1], dims[c2, 2]}])));  % Equal shape horizontal
+% Equal shape horizontal & vertical
+constraint forall(c1 in CIRCUITS)(lex_lesseq([sol_hor[c2] | c2 in CIRCUITS where c1 <= c2 /\ {dims[c1, 1], dims[c1, 2]} == {dims[c2, 1], dims[c2, 2]}], reverse([sol_hor[c2] | c2 in CIRCUITS where c1 <= c2 /\ {dims[c1, 1], dims[c1, 2]} == {dims[c2, 1], dims[c2, 2]}])));  % horizontal
 
-constraint forall(c1 in CIRCUITS)(lex_lesseq([sol_ver[c2] | c2 in CIRCUITS where c1 < c2 /\ {dims[c1, 1], dims[c1, 2]} == {dims[c2, 1], dims[c2, 2]}], reverse([sol_ver[c2] | c2 in CIRCUITS where c1 < c2 /\ {dims[c1, 1], dims[c1, 2]} == {dims[c2, 1], dims[c2, 2]}])));  % Equal shape vertical
+constraint forall(c1 in CIRCUITS)(lex_lesseq([sol_ver[c2] | c2 in CIRCUITS where c1 <= c2 /\ {dims[c1, 1], dims[c1, 2]} == {dims[c2, 1], dims[c2, 2]}], reverse([sol_ver[c2] | c2 in CIRCUITS where c1 <= c2 /\ {dims[c1, 1], dims[c1, 2]} == {dims[c2, 1], dims[c2, 2]}])));  % vertical
            
 % Utilities
 constraint forall(c in CIRCUITS)(max_y[c] == sol[c, 2]+dims[c, 2]);  % Consistence for max_y
+%constraint forall(c in CIRCUITS)(dims_v[c, 1] == dims[c, 1] /\ dims_v[c, 2] == dims[c, 2]);
+%constraint w_v == w;
 
 %% Search
 ann: search_ann;
+ann: search_ann1;
 %search_ann = int_search(q, input_order, indomain_min);
 %search_ann = int_search(q, first_fail, indomain_min);
-search_ann = int_search(sol, dom_w_deg, indomain_min);
+search_ann = int_search(sol_hor, dom_w_deg, indomain_min);
+search_ann1 = int_search(sol_ver, dom_w_deg, indomain_min);
 %search_ann = int_search(q, input_order, indomain_random);
 %search_ann = int_search(sol, dom_w_deg, indomain_random);
 
 %% Solve & output
 solve
   :: search_ann
-  :: restart_luby(250) % L = 250
-  :: relax_and_reconstruct(sol_ver, 75)
+  :: search_ann1
+  %:: restart_luby(250) % L = 250
+  %:: relax_and_reconstruct(array1d(sol), 50)
   minimize obj;
   
 output [
