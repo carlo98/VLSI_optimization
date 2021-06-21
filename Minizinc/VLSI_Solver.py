@@ -27,7 +27,8 @@ def plot_result(result):
 
 def solve_instance(instance_id):
     # Load model from file
-    model = Model("./model_2.mzn")
+    model = Model("./model_rotation.mzn")
+    print("Model Rotation")
     
     # Find the MiniZinc solver configuration for Gecode
     solver = Solver.lookup("gecode")
@@ -39,7 +40,8 @@ def solve_instance(instance_id):
     instance = Instance(solver, model)
     
     timeout = datetime.timedelta(seconds=300)
-    return instance.solve(timeout=timeout, nogood="true")
+    #return instance.solve(timeout=timeout, nogood="true")
+    return instance.solve(timeout=timeout)
     
 
 def solve_all(max_instance):
@@ -48,15 +50,18 @@ def solve_all(max_instance):
     for i in range(1, max_instance+1):
         print("Solving: ", i)
         res = solve_instance(i)
-        results.append({"obj": res["objective"], "sol": res["sol"], "dims": res["dims_v"], "w": res["w_v"]})
-        times.append(res.statistics["solveTime"].total_seconds())
+        #results.append({"obj": res["objective"], "sol": res["sol"], "dims": res["dims_v"], "w": res["w_v"]})
+        #times.append(res.statistics["solveTime"].total_seconds())
+        print("\tObj: ", res["objective"])
+        print("\tTime: ", res.statistics["solveTime"].total_seconds())
+        print("\tFailures: ", res.statistics["failures"])
         print("Solved: ", i)
         
-    times = np.array(times)
-    plt.plot(range(1, max_instance+1), times, 'o')
-    plt.show() 
+    #times = np.array(times)
+    #plt.plot(range(1, max_instance+1), times, 'o')
+    #plt.show() 
 
 
 if __name__ == "__main__":
-    solve_all(20)
+    solve_all(40)
 

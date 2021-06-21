@@ -69,8 +69,8 @@ ann: search_ann;
 ann: search_ann1;
 %search_ann = int_search(q, input_order, indomain_min);
 %search_ann = int_search(q, first_fail, indomain_min);
-search_ann = int_search(sol_hor, dom_w_deg, indomain_random);
-search_ann1 = int_search(sol_ver, dom_w_deg, indomain_random);
+search_ann = int_search(sol_hor, input_order, indomain_random);
+search_ann1 = int_search(sol_ver, input_order, indomain_random);
 %search_ann = int_search(q, input_order, indomain_random);
 %search_ann = int_search(sol_tmp, dom_w_deg, indomain_random);
 
@@ -79,7 +79,7 @@ solve
   :: search_ann
   :: search_ann1
   :: restart_luby(250) % L = 250
-  %:: relax_and_reconstruct(array1d(sol_tmp), 45)
+  %:: relax_and_reconstruct(array1d(sol_tmp), 80)
   minimize obj;
   
 output [
