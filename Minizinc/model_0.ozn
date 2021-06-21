@@ -1,0 +1,5 @@
+output ["obj: ",show(obj),"\n","Solution: ",show([sol[c,1] | c in CIRCUITS, ]),show([sol[c,2] | c in CIRCUITS, ])];
+set of int: CIRCUITS = 1..12;
+array [CIRCUITS,1..2] of int: sol;
+array [CIRCUITS] of int: heights;
+int: obj = max(heights);

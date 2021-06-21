@@ -5,7 +5,7 @@
         "model_2.mzn",
         "model_rotation.mzn"
     ],
-    "openTab": 3,
+    "openTab": 2,
     "projectFiles": [
         "instances/ins-1.dzn",
         "instances/ins-10.dzn",
@@ -49,6 +49,7 @@
         "instances/ins-9.dzn",
         "model_0.mzn",
         "model_1.mzn",
+        "model_2.mzc.mzn",
         "model_2.mzn",
         "model_rotation.mzn",
         "time_statistics.mpc"

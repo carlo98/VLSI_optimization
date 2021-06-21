@@ -6,7 +6,7 @@ array[CIRCUITS, 1..2] of int: dims;  % Dimensions xy for each circuit
 
 %% Variables
 array[CIRCUITS, 1..2] of var 0..max(w, sum(c in CIRCUITS)(dims[c, 2])): sol;  % xy positions of left-bottom vertex for each circuit
-array[CIRCUITS] of var int: heights;  % Height for each circuit
+array[CIRCUITS] of var 0..2000: heights;  % Height for each circuit
 
 %% Constraints
 constraint forall(c in CIRCUITS)(heights[c] == sol[c, 2]+dims[c, 2]);  % Consistence for heights

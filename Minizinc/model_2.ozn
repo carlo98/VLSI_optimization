@@ -1,0 +1,8 @@
+string: _mzn_solution_checker = "@eAGFU8tymzAU3fMVKis81VBD3LqFsMoq26ZdEYZRhBzU4ZERYNqMP77nAlHcKXEWGo7uPTr3\niW5kNRSKuV1bHZXJjSrUQTe6123T+fVz48aOtpy+qPSDtfYRG5dvEzud6ll7YNP15vb7zc/b\nH3csYYHvwymMEX9Y+mLnsIaZpRe67i5wjsKwre/X4rc38m6ovZQepJLDfWISGjYgZ9lmEzEU\n85/euVS43W4jVir9WPaILFFrbwRyYYfWiKry0sWXyixJoDYF+3gx7KqMOLa6yGFRplOSmupB\njZMQlwGX4YakCJzLsbFURsH+IZHhm9pzWoFNK8iuk3E9Myp76nT78AszoU4uBcIpmgYdU8LI\nMgemSb5gcPEsnw1z5m2dj3mhHrlugJFQbgQhCE0rxKJzMVZjl2r9rChy7LRD/zT0LHVxi5jL\nu7IdPeANd+8bl7t3bTVQk6zPFrlW1z+U9aFksfOEldZS9IqtDOPizk0do6Lf3150AwiDnL8Y\na0IvU1jsgAhez8sUUkX3n2YKXRYKwYVCbEsJXrePoFVBFq8qlkLQqoRowUj/4T52aJ5BGDtE\nA0xPV/xqOZ9xvuDscb7ifDvtYN8B73iwO+1x2YMAsb9GiFWb\n";
+output ["Height: ",show(obj),"\n","Solution: ",show(sol_hor),show(sol_ver)];
+set of int: CIRCUITS = 1..12;
+array [CIRCUITS,1..2] of int: sol:: mzn_check_var;
+array [CIRCUITS] of int: max_y;
+array [CIRCUITS] of int: sol_hor = [sol[c,1] | c in CIRCUITS, ];
+array [CIRCUITS] of int: sol_ver = [sol[c,2] | c in CIRCUITS, ];
+int: obj = max(max_y);
