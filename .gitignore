@@ -1,2 +1,3 @@
 *.dzn
 instances
+.ipynb_checkpoints

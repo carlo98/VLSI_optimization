@@ -27,8 +27,8 @@ def plot_result(result):
 
 def solve_instance(instance_id):
     # Load model from file
-    model = Model("./model_rotation.mzn")
-    print("Model Rotation")
+    model = Model("./model_2.mzn")
+    print("Model 2")
     
     # Find the MiniZinc solver configuration for Gecode
     solver = Solver.lookup("gecode")

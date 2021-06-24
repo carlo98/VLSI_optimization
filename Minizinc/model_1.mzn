@@ -35,10 +35,6 @@ constraint cumulative(sol_hor, dim_hor, dim_ver, obj);  % Cumulative on x
 constraint forall(c in CIRCUITS)(sol[c, 1] <= max_width - dims[c, 1]);  % Implicit constraint on max width
 constraint forall(c in CIRCUITS)(sol[c, 2] <= max_height - dims[c, 2]);  % Implicit constraint on max height
 
-% Symmetry breaking
-constraint lex_lesseq(sol_hor, reverse(sol_hor)) /\  % Horizontal
-           lex_lesseq(sol_ver, reverse(sol_ver));  % Vertical
-
 %% Search
 ann: search_ann;
 %search_ann = int_search(q, input_order, indomain_min);
