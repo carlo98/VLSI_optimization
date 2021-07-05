@@ -31,8 +31,8 @@ array[CIRCUITS] of var 0..max_width-min([dims[c, 1] | c in CIRCUITS]): sol_hor =
 array[CIRCUITS] of var 0..max_height-min([dims[c, 2] | c in CIRCUITS]): sol_ver = [sol_tmp[c, 2] | c in CIRCUITS];  % y values sol
 array[CIRCUITS, 1..2] of var 0..max(max_width, max_height): sol;  % Ordered solution
 array[CIRCUITS] of var CIRCUITS_R: taken;  % taken[i] gives circuit i rotated or original
-%array[CIRCUITS, 1..2] of var int: dims_v;  % Used for plot in python
-%var int: w_v;  % Used for plot in python
+array[CIRCUITS, CIRCUITS] of var bool: order_sol_x;  % o_ij is 1 if x_i <= x_j
+array[CIRCUITS, CIRCUITS] of var bool: order_sol_y;  % o_ij is 1 if y_i <= y_j
 
 % Objective value
 var min_height..max_height: obj = max(max_y);  % Minimizing area giving precedence to height
@@ -46,7 +46,9 @@ constraint cumulative(sol_hor, dim_hor, dim_ver, obj);  % Cumulative on x
 constraint forall(c in CIRCUITS)(sol_tmp[c, 1] <= max_width - dims_r[per[taken[c]], 1]);  % Implicit constraint on max width
 constraint forall(c in CIRCUITS)(sol_tmp[c, 2] <= max_height - dims_r[per[taken[c]], 2]);  % Implicit constraint on max height
 
-constraint sol_tmp[1, 1] == 0 /\ sol_tmp[1, 2] == 0;  % Biggest rectangle in left-bottom angle
+% Symmetry breaking relative position
+constraint lex_lesseq(array1d(order_sol_x), [order_sol_x[j, i] | i in CIRCUITS, j in CIRCUITS])  % horizontal
+        /\ lex_lesseq(array1d(order_sol_y), [order_sol_y[j, i] | i in CIRCUITS, j in CIRCUITS]);  % vertical
            
 % Equal shape horizontal & vertical
 constraint forall(c1 in CIRCUITS)(lex_lesseq([sol_hor[c2] | c2 in c1..n where [dims[per[c1], 1], dims[per[c1], 2]] == [dims[per[c2], 1], dims[per[c2], 2]]], reverse([sol_hor[c2] | c2 in c1..n where [dims[per[c1], 1], dims[per[c1], 2]] == [dims[per[c2], 1], dims[per[c2], 2]]])));  % horizontal
@@ -59,8 +61,6 @@ constraint forall(c1, c2 in CIRCUITS where c1 <= c2 /\ dims[per[c1], 2] == dims[
            
 % Utilities
 constraint forall(c in CIRCUITS)(sol[per[c],1] == sol_tmp[c, 1] /\ sol[per[c],2] == sol_tmp[c, 2]);  % Consistence for ordered solution
-%constraint forall(c in CIRCUITS)(dims_v[c, 1] == dims[c, 1] /\ dims_v[c, 2] == dims[c, 2]);
-%constraint w_v == w;
 constraint forall(c in CIRCUITS where dims[per[c], 1] == dims[per[c], 2])(taken[c] = c); % Do no rotate squares
 constraint forall(c in CIRCUITS)(max_y[c] = sol_tmp[c, 2]+dims_r[per[taken[c]], 2]);  % Consistence for max_y
 constraint forall(c in CIRCUITS)(taken[c] = c \/ taken[c] = c+n); % Choosing between rotated or original
@@ -69,6 +69,8 @@ constraint forall(c in CIRCUITS)(dims_r[c, 1] = dims[c, 1] /\
                                  dims_r[c+n, 1] = dims[c, 2] /\
                                  dims_r[c+n, 2] = dims[c, 1]);  % Consistence for original and rotated dimensions
 constraint forall(c in CIRCUITS)(sol_tmp[c, 1] = sol_r[taken[c], 1] /\ sol_tmp[c, 2] = sol_r[taken[c], 2]); % Consistence for solution
+constraint forall(c1, c2 in CIRCUITS)(order_sol_x[c1, c2] <-> (sol[c1, 1] <= sol[c2, 1]));  % Consistence for order sol x
+constraint forall(c1, c2 in CIRCUITS)(order_sol_y[c1, c2] <-> (sol[c1, 2] <= sol[c2, 2]));  % Consistence for order sol y
 
 %% Search
 ann: search_ann;
