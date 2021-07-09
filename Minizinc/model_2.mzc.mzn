@@ -5,7 +5,9 @@ set of int: CIRCUITS = 1..n;
 array[CIRCUITS, 1..2] of int: dims;  % Dimensions xy for each circuit
 
 %% Variables
-array[CIRCUITS, 1..2] of var 0..max(w, sum(c in CIRCUITS)(dims[c, 2])): sol;  % xy positions of left-bottom vertex for each circuit
+int: max_width = min(w, sum(c in CIRCUITS)(dims[c, 1]));
+int: max_height = sum(c in CIRCUITS)(dims[c, 2]);
+array[CIRCUITS, 1..2] of var 0..max(max_width, max_height): sol;  % xy positions of left-bottom vertex for each circuit
 array[CIRCUITS] of var 0..2000: heights;  % Height for each circuit
 
 %% Constraints
