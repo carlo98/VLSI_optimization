@@ -2,7 +2,6 @@ include "lex_lesseq.mzn";
 include "cumulative.mzn";
 include "diffn.mzn";
 include "arg_sort.mzn";
-include "gecode.mzn";
 
 %% Inputs
 int: w;  % Width of plate
@@ -39,7 +38,7 @@ constraint cumulative(sol_ver, dim_ver, dim_hor, max_width);  % Cumulative on y
 constraint cumulative(sol_hor, dim_hor, dim_ver, obj);  % Cumulative on x
 
 % Avoid symmetries
-constraint sol_tmp[1, 1] <= 1+(w-dims[per[1], 1])/2 /\ sol_tmp[1, 2] <= 1+(obj-dims[per[1], 2])/2;
+constraint sol_tmp[1, 1] <= 1+(w-dims[per[1], 1])/2 /\ sol_tmp[1, 2] <= 1+(max_height-dims[per[1], 2])/2;
 
 % Not covered by cumulatives
 constraint forall(c in CIRCUITS)(sol_tmp[c, 1] <= max_width - dims[per[c], 1]);  % Constraint on max width
@@ -64,19 +63,14 @@ constraint forall(c in CIRCUITS)(sol[per[c],1] == sol_tmp[c, 1] /\ sol[per[c],2]
 %% Search
 ann: search_ann;
 ann: search_ann1;
-%search_ann = int_search(q, input_order, indomain_min);
-%search_ann = int_search(q, first_fail, indomain_min);
 search_ann = int_search(sol_hor, input_order, indomain_random);
 search_ann1 = int_search(sol_ver, input_order, indomain_random);
-%search_ann = int_search(q, input_order, indomain_random);
-%search_ann = int_search(sol_tmp, dom_w_deg, indomain_min);
 
 %% Solve & output
 solve
   :: search_ann
   :: search_ann1
   :: restart_luby(250) % L = 250
-  %:: relax_and_reconstruct(array1d(sol_ver), 80)
   minimize obj;
   
 output [

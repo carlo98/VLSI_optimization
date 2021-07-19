@@ -1,3 +1,6 @@
 *.dzn
 instances
 .ipynb_checkpoints
+out_2
+out
+out_rotation

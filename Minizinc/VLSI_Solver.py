@@ -21,17 +21,37 @@ def plot_result(result):
 
     plt.xticks(range(w+1))
     plt.yticks(range(max([ys[i]+dims[i][1] for i in range(len(ys))])+1))
-    #plt.grid(b=True, which='major', color='#666666', linestyle='-')
     plt.show()
+
+
+def read_instance(instance_id):
+    filepath = "../instances/ins-" + str(instance_id) + ".txt"
+    with open(filepath, "r") as f_in:
+        f = f_in.readlines()
+        for i in range(len(f)):
+            if not f[i][-1].isnumeric():
+                f[i] = f[i][:-1]
+                
+        W = int(f[0])
+        n = int(f[1])
+        dims_line = f[2].split(" ")    
+        dims = [[int(dims_line[0]), int(dims_line[1])]]
+        for i in range(1, int(f[1])-1):
+            dims_line = f[2 + i].split(" ")
+            dims.append([int(dims_line[0]), int(dims_line[1])])
+        dims_line = f[-1].split(" ")
+        dims.append([int(dims_line[0]), int(dims_line[1])])
+        
+    return dims, W, n
 
 
 def solve_instance(instance_id):
     # Load model from file
-    model = Model("./model_2.mzn")
-    print("Model 2")
+    model = Model("./model_rotation.mzn")
+    print("Model Rotation")
     
     # Find the MiniZinc solver configuration for Gecode
-    solver = Solver.lookup("chuffed")
+    solver = Solver.lookup("gecode")
 
     # Assign data
     model.add_file("./instances/ins-" + str(instance_id) + ".dzn")
@@ -40,7 +60,6 @@ def solve_instance(instance_id):
     instance = Instance(solver, model)
     
     timeout = datetime.timedelta(seconds=300)
-    #return instance.solve(timeout=timeout, nogood="true")
     return instance.solve(timeout=timeout)
     
 
@@ -50,16 +69,22 @@ def solve_all(max_instance):
     for i in range(1, max_instance+1):
         print("Solving: ", i)
         res = solve_instance(i)
-        #results.append({"obj": res["objective"], "sol": res["sol"], "dims": res["dims_v"], "w": res["w_v"]})
-        #times.append(res.statistics["solveTime"].total_seconds())
         print("\tObj: ", res["objective"])
         print("\tTime: ", res.statistics["solveTime"].total_seconds())
         print("\tFailures: ", res.statistics["failures"])
         print("Solved: ", i)
-        
-    #times = np.array(times)
-    #plt.plot(range(1, max_instance+1), times, 'o')
-    #plt.show() 
+
+        dims, W, n = read_instance(i)
+
+        f = open("out_rotation/out-" + str(i) + ".txt", "w")
+        f.write(str(W) + " " + str(res["objective"]) + "\n")
+        f.write(str(n) + "\n")
+        for i in range(n):
+            if i < n-1:
+                f.write(str(dims[i][0]) + " " + str(dims[i][1]) + " " + str(res["sol"][i][0]) + " " + str(res["sol"][i][1]) + "\n")
+            else:
+                f.write(str(dims[i][0]) + " " + str(dims[i][1]) + " " + str(res["sol"][i][0]) + " " + str(res["sol"][i][1]))
+        f.close()
 
 
 if __name__ == "__main__":
