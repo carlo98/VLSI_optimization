@@ -44,9 +44,7 @@ constraint forall(c in CIRCUITS)(sol_tmp[c, 1] <= max_width - dims_r[per[taken[c
 constraint forall(c in CIRCUITS)(sol_tmp[c, 2] <= max_height - dims_r[per[taken[c]], 2]);  % Constraint on max height
            
 % Equal shape horizontal & vertical
-constraint forall(c1 in CIRCUITS)(symmetry_breaking_constraint(lex_lesseq([sol_hor[c2] | c2 in c1..n where [dims[per[c1], 1], dims[per[c1], 2]] == [dims[per[c2], 1], dims[per[c2], 2]]], reverse([sol_hor[c2] | c2 in c1..n where [dims[per[c1], 1], dims[per[c1], 2]] == [dims[per[c2], 1], dims[per[c2], 2]]]))));  % horizontal
-
-constraint forall(c1 in CIRCUITS)(symmetry_breaking_constraint(lex_lesseq([sol_ver[c2] | c2 in c1..n where [dims[per[c1], 1], dims[per[c1], 2]] == [dims[per[c2], 1], dims[per[c2], 2]]], reverse([sol_ver[c2] | c2 in c1..n where [dims[per[c1], 1], dims[per[c1], 2]] == [dims[per[c2], 1], dims[per[c2], 2]]]))));  % vertical
+constraint forall(c1 in CIRCUITS)(symmetry_breaking_constraint(lex_lesseq([{sol_hor[c2], sol_ver[c2]} | c2 in c1..n where [dims[per[c1], 1], dims[per[c1], 2]] == [dims[per[c2], 1], dims[per[c2], 2]]], [{sol_hor[c2], sol_ver[c2]} | c2 in reverse(c1..n) where [dims[per[c1], 1], dims[per[c1], 2]] == [dims[per[c2], 1], dims[per[c2], 2]]])));
 
 constraint forall(c1, c2 in CIRCUITS where c1 <= c2 /\ dims[per[c1], 1] == dims[per[c2], 1])(symmetry_breaking_constraint(sol_hor[c1]==sol_hor[c2] -> sol_ver[c1,]<=sol_ver[c2]));  % horizontal
 

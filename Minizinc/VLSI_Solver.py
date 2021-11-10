@@ -25,7 +25,7 @@ def plot_result(result):
 
 
 def read_instance(instance_id):
-    filepath = "../instances/ins-" + str(instance_id) + ".txt"
+    filepath = "../../instances/ins-" + str(instance_id) + ".txt"
     with open(filepath, "r") as f_in:
         f = f_in.readlines()
         for i in range(len(f)):
@@ -47,8 +47,8 @@ def read_instance(instance_id):
 
 def solve_instance(instance_id):
     # Load model from file
-    model = Model("./model_rotation.mzn")
-    print("Model Rotation")
+    model = Model("./model_2.mzn")
+    print("Model 2")
     
     # Find the MiniZinc solver configuration for Gecode
     solver = Solver.lookup("gecode")
@@ -76,7 +76,7 @@ def solve_all(max_instance):
 
         dims, W, n = read_instance(i)
 
-        f = open("out_rotation/out-" + str(i) + ".txt", "w")
+        f = open("out_best/out-" + str(i) + ".txt", "w")
         f.write(str(W) + " " + str(res["objective"]) + "\n")
         f.write(str(n) + "\n")
         for i in range(n):

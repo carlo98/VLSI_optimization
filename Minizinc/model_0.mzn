@@ -19,16 +19,11 @@ var int: obj = max(heights);
 
 %% Search
 ann: search_ann;
-%search_ann = int_search(q, input_order, indomain_min);
-%search_ann = int_search(q, first_fail, indomain_min);
-%search_ann = int_search(q, dom_w_deg, indomain_min);
-%search_ann = int_search(q, input_order, indomain_random);
 search_ann = int_search(sol, dom_w_deg, indomain_random);
 
 %% Solve & output
 solve
   :: search_ann
-  %:: restart_luby(250) % L = 250
   minimize obj;
   
 output [
