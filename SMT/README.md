@@ -3,5 +3,3 @@
 - Download all the instances inside the folder "instances"
 - Create a folder called "out" in the same folder of the notebook
 - Run all the cells of the notebook
-
-Instance 40 not solved.
