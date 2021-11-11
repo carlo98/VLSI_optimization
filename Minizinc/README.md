@@ -1,5 +1,5 @@
 # Usage
-- Download (Minizinc)[https://www.minizinc.org/] and open the files with it.
+- Download [Minizinc](https://www.minizinc.org/) and open the files with it.
 - Download the instances and transform them into .dzn files, using the notebook provided in the "utility" folder.
 
 ## Info
